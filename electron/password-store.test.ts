@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { PINNED_PASSWORD_STORE, pinnedPasswordStore } from "./password-store";
 
 describe("pinnedPasswordStore", () => {
-  it("pins libsecret on linux when a secret service is on the bus", () => {
+  it("pins libsecret on linux when libsecret and a secret service are there", () => {
     expect(
       pinnedPasswordStore(
         "linux",
@@ -13,7 +13,7 @@ describe("pinnedPasswordStore", () => {
     expect(PINNED_PASSWORD_STORE).toBe("gnome-libsecret");
   });
 
-  it("keeps chromium's default when no secret service is on the bus", () => {
+  it("keeps chromium's default when libsecret or a secret service is missing", () => {
     expect(
       pinnedPasswordStore(
         "linux",

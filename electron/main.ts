@@ -54,6 +54,7 @@ import { ThumbarController } from "./thumbar.js";
 import { OverlayManager } from "./overlay.js";
 import { detectCompositor } from "./compositor/index.js";
 import { pinnedPasswordStore } from "./password-store.js";
+import { hasLibsecret } from "./libsecret.js";
 import { hasSecretService } from "./secret-service.js";
 import { BundleManager } from "./bundle-manager.js";
 import { createBundleErrorStamp } from "./bundle-stamp.js";
@@ -104,7 +105,7 @@ if (detectCompositor() !== "none") {
 const passwordStore = pinnedPasswordStore(
   process.platform,
   (name) => app.commandLine.hasSwitch(name),
-  () => hasSecretService(),
+  () => hasLibsecret() && hasSecretService(),
 );
 if (passwordStore)
   app.commandLine.appendSwitch("password-store", passwordStore);
