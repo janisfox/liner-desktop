@@ -100,7 +100,6 @@ app.commandLine.appendSwitch("disable-http2");
 if (detectCompositor() !== "none") {
   app.commandLine.appendSwitch("enable-features", "GlobalShortcutsPortal");
 }
-// same keyring on every linux desktop, so logins survive switching de/wm
 const passwordStore = pinnedPasswordStore(process.platform, (name) =>
   app.commandLine.hasSwitch(name),
 );
