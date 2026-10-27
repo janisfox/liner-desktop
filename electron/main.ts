@@ -54,6 +54,7 @@ import { ThumbarController } from "./thumbar.js";
 import { OverlayManager } from "./overlay.js";
 import { detectCompositor } from "./compositor/index.js";
 import { pinnedPasswordStore } from "./password-store.js";
+import { hasSecretService } from "./secret-service.js";
 import { BundleManager } from "./bundle-manager.js";
 import { createBundleErrorStamp } from "./bundle-stamp.js";
 import { createSleepBlocker } from "./sleep-blocker.js";
@@ -100,8 +101,10 @@ app.commandLine.appendSwitch("disable-http2");
 if (detectCompositor() !== "none") {
   app.commandLine.appendSwitch("enable-features", "GlobalShortcutsPortal");
 }
-const passwordStore = pinnedPasswordStore(process.platform, (name) =>
-  app.commandLine.hasSwitch(name),
+const passwordStore = pinnedPasswordStore(
+  process.platform,
+  (name) => app.commandLine.hasSwitch(name),
+  () => hasSecretService(),
 );
 if (passwordStore)
   app.commandLine.appendSwitch("password-store", passwordStore);
