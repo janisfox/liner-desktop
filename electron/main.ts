@@ -53,6 +53,7 @@ import { registerAuthSessionIpc } from "./auth-session-ipc.js";
 import { ThumbarController } from "./thumbar.js";
 import { OverlayManager } from "./overlay.js";
 import { detectCompositor } from "./compositor/index.js";
+import { pinnedPasswordStore } from "./password-store.js";
 import { BundleManager } from "./bundle-manager.js";
 import { createBundleErrorStamp } from "./bundle-stamp.js";
 import { createSleepBlocker } from "./sleep-blocker.js";
@@ -99,6 +100,12 @@ app.commandLine.appendSwitch("disable-http2");
 if (detectCompositor() !== "none") {
   app.commandLine.appendSwitch("enable-features", "GlobalShortcutsPortal");
 }
+// same keyring on every linux desktop, so logins survive switching de/wm
+const passwordStore = pinnedPasswordStore(process.platform, (name) =>
+  app.commandLine.hasSwitch(name),
+);
+if (passwordStore)
+  app.commandLine.appendSwitch("password-store", passwordStore);
 registerLocalTrackScheme();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
